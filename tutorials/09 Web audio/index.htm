@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Audio Demo</title>
+  <link rel="stylesheet" href="css/style.css">
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.162.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.162.0/examples/jsm/",
+        "three/libs/": "https://unpkg.com/three@0.162.0/examples/libs/"
+      }
+    }
+  </script>
+
+
+  <script type="module" src="js/sound.js"></script>
+
+  </head>
+
+  <body>
+    <header>
+        <p>w e b a u d i o </p>
+        <button id="play-button">Click to play Music</button>
+        <button id="pause-button">Click to pause Music</button>
+    </header>
+
+    <audio id= "song" src="media/UsThem.mp3"></audio>
+    <script src="js.sound.js"></script>
+  </body>
+  </html>
