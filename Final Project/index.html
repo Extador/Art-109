@@ -1,126 +1,250 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-* {
-box-sizing: border-box;
-}
-body {
-background-color: #f5f5f5;
-font-family: 'Arial', sans-serif;
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-height: 100vh;
-margin: 0;
-}
-canvas {
-border: 2px solid steelblue;
-}
-.toolbox {
-background-color: rgb(53, 78, 99);
-border: 1px solid rgb(133, 118, 233);
-display: flex;
-width: 804px;
-padding: 1rem;
-}
-.toolbox > * {
-background-color: #ffffff;
-border: none;
-display: inline-flex;
-align-items: center;
-justify-content: center;
-font-size: 2rem;
-height: 50px;
-width: 50px;
-margin: 0.25rem;
-padding: 0.25rem;
-cursor: pointer;
-}
-.toolbox > *:last-child {
-margin-left: auto;
-}
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anxious Paintbrush</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background: repeating-linear-gradient(
+        0deg,
+        #0f0f0f,
+        #0f0f0f 1px,
+        #121212 2px
+      );
+   
+      font-family: 'Share Tech Mono', monospace;
+      color: lime;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      animation: flickerBG 3s infinite;
+    }
+
+    canvas {
+      border: 2px dashed #ff00ff;
+      box-shadow: 0 0 20px #00ffff;
+      animation: jitterCanvas 0.2s infinite;
+    }
+
+    .toolbox {
+      background-color: rgba(0, 0, 0, 0.9);
+      border: 2px solid #ff0044;
+      display: flex;
+      width: 804px;
+      padding: 1rem;
+      margin-top: 10px;
+      animation: glitchText 1s infinite alternate-reverse;
+    }
+
+    .toolbox > * {
+      background-color: #111;
+      border: 1px solid #0ff;
+      color: #0ff;
+      font-size: 1.5rem;
+      height: 50px;
+      width: 50px;
+      margin: 0.75rem;
+      padding: 0.75rem;
+      cursor: pointer;
+      text-shadow: 0 0 5px red, 0 0 10px blue;
+    }
+
+    .toolbox > *:last-child {
+      margin-left: auto;
+    }
+
+    #size {
+      font-size: 1.5rem;
+      width: 40px;
+      text-align: center;
+    }
+
+    @keyframes flickerBG {
+      0%, 100% { background-color: #0f0f0f; }
+      50% { background-color: #080808; }
+    }
+
+    @keyframes jitterCanvas {
+      0%, 100% {
+        transform: translate(5px, 5px) rotate(0.5deg);
+      }
+      50% {
+        transform: translate(-1px, 1px) rotate(-0.5deg);
+      }
+    }
+
+    @keyframes glitchText {
+      0% {
+        transform: skew(2deg, 2deg);
+        color: #0ff;
+      }
+      33% {
+        transform: skew(2deg, 2deg);
+        color: #ff0;
+      }
+      66% {
+        transform: skew(-2deg, -1deg);
+        color: #f0f;
+      }
+      100% {
+        transform: skew(0deg, 0deg);
+        color: #0ff;
+      }
+    }
+  </style>
 </head>
 <body>
-    <canvas id="canvas" width="800" height="700"></canvas>
-<div class="toolbox">
-<button id="decrease">-</button>
-<span id="size">10</span>
-<button id="increase">+</button>
-<input type="color" id="color">
-<button id="clear">X</button>
-</div>
-<script>
-    const canvas = document.getElementById('canvas');
-const increaseBtn = document.getElementById('increase');
-const decreaseBtn = document.getElementById('decrease');
-const sizeEL = document.getElementById('size');
-const colorEl = document.getElementById('color');
-const clearEl = document.getElementById('clear');
-const ctx = canvas.getContext('2d');
-let size = 10
-let isPressed = false
-colorEl.value = 'black'
-let color = colorEl.value
-let x
-let y
-canvas.addEventListener('mousedown', (e) => {
-isPressed = true
-x = e.offsetX
-y = e.offsetY
-})
-document.addEventListener('mouseup', (e) => {
-isPressed = false
-x = undefined
-y = undefined
-})
-canvas.addEventListener('mousemove', (e) => {
-if(isPressed) {
-const x2 = e.offsetX
-const y2 = e.offsetY
-drawCircle(x2, y2)
-drawLine(x, y, x2, y2)
-x = x2
-y = y2
-}
-})
-function drawCircle(x, y) {
-ctx.beginPath();
-ctx.arc(x, y, size, 0, Math.PI * 2)
-ctx.fillStyle = color
-ctx.fill()
-}
-function drawLine(x1, y1, x2, y2) {
-ctx.beginPath()
-ctx.moveTo(x1, y1)
-ctx.lineTo(x2, y2)
-ctx.strokeStyle = color
-ctx.lineWidth = size * 2
-ctx.stroke()
-}
-function updateSizeOnScreen() {
-sizeEL.innerText = size
-}
-increaseBtn.addEventListener('click', () => {
-size += 5
-if(size > 50) {
-size = 50
-}
-updateSizeOnScreen()
-})
-decreaseBtn.addEventListener('click', () => {
-size -= 5
-if(size < 5) {
-size = 5
-}
-updateSizeOnScreen()
-})
-colorEl.addEventListener('change', (e) => color = e.target.value)
-clearEl.addEventListener('click', () => ctx.clearRect(0,0, canvas.width, canvas.height))
+  <canvas id="canvas" width="1500" height="1200"></canvas>
+  <div class="toolbox">
+    <button id="decrease">-</button>
+    <span id="size">10</span>
+    <button id="increase">+</button>
+    <input type="color" id="color">
+    <button id="clear">X</button>
+  </div>
+  <script>
+  const canvas = document.getElementById('canvas');
+  const increaseBtn = document.getElementById('increase');
+  const decreaseBtn = document.getElementById('decrease');
+  const sizeEL = document.getElementById('size');
+  const colorEl = document.getElementById('color');
+  const clearEl = document.getElementById('clear');
+  const ctx = canvas.getContext('2d');
+
+  let size = 20;
+  let isPressed = false;
+  colorEl.value = '#00ffff';
+  let color = colorEl.value;
+  let x, y;
+
+  let canvasState = null; // save
+
+  function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+
+  // generate random canvas size
+  function resizeCanvas() {
+    const randomWidth = Math.floor(Math.random() * (1200 - 600 + 1)) + 600;  // 
+    const randomHeight = Math.floor(Math.random() * (800 - 400 + 1)) + 400; // 
+    const image = canvas.toDataURL(); // Save state 
+    canvas.width = randomWidth;
+    canvas.height = randomHeight;
+    const img = new Image();
+    img.onload = function () {
+      ctx.drawImage(img, 0, 0); // return to previous canvas 
+    };
+    img.src = image; // load the saved image 
+  }
+
+  // change canvas size every 2 seconds
+  setInterval(resizeCanvas, 2000);
+
+  // change brush size every 2 seconds 
+  setInterval(() => {
+    size = Math.floor(Math.random() * 10) + 5;  // Brush size
+    updateSizeOnScreen();
+  }, 2000);
+
+  // cursor shapes
+  const cursorShapes = [
+    'crosshair',  // Crosshair cursor
+    'pointer',    // Pointer cursor (hand)
+    'default',    // Default cursor
+    'move',       // Move cursor
+    'text',       // Text cursor 
+    'idk',       // idk cursor
+  ];
+
+  function changeCursorShape() {
+    const randomShape = cursorShapes[Math.floor(Math.random() * cursorShapes.length)];
+    canvas.style.cursor = randomShape;
+  }
+
+  setInterval(changeCursorShape, 200);
+
+  canvas.addEventListener('mousedown', (e) => {
+    isPressed = true;
+    x = e.offsetX;
+    y = e.offsetY;
+  });
+
+  document.addEventListener('mouseup', () => {
+    isPressed = false;
+    x = undefined;
+    y = undefined;
+  });
+
+  canvas.addEventListener('mousemove', (e) => {
+    if (isPressed) {
+      const x2 = canvas.width - e.offsetX;
+      const y2 = canvas.height - e.offsetY;
+      drawCircle(x2, y2);
+      drawLine(x, y, x2, y2);
+      x = x2;
+      y = y2;
+    }
+  });
+
+  function drawCircle(x, y) {
+    ctx.beginPath();
+    ctx.arc(x, y, size, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
+  }
+
+  function drawLine(x1, y1, x2, y2) {
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = size * 2;
+    ctx.stroke();
+  }
+
+  function updateSizeOnScreen() {
+    sizeEL.innerText = size;
+  }
+
+  increaseBtn.addEventListener('click', () => {
+    size += 5;
+    if (size > 50) size = 50;
+    updateSizeOnScreen();
+  });
+
+  decreaseBtn.addEventListener('click', () => {
+    size -= 5;
+    if (size < 5) size = 5;
+    updateSizeOnScreen();
+  });
+
+  colorEl.addEventListener('change', (e) => {
+    color = e.target.value;
+  });
+
+  canvas.addEventListener('mousemove', () => {
+    color = getRandomColor();
+  });
+
+  clearEl.addEventListener('click', () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  });
 </script>
+
 </body>
 </html>
